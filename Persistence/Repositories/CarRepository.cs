@@ -1,4 +1,5 @@
 ﻿using APIdemo.Models;
+using Application.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace APIdemo.Repositories
 
             if (result == null)
             {
-                return null;
+                throw new ObjectNotFoundException($"Car not found by id {id}");
             }
 
             this.context.Remove(result);
@@ -50,7 +51,7 @@ namespace APIdemo.Repositories
 
             if (result == null)
             {
-                return null;
+                throw new ObjectNotFoundException($"Car not found by id {id}");
             }
 
             return result;
@@ -62,7 +63,7 @@ namespace APIdemo.Repositories
 
             if (result == null)
             {
-                return null;
+                throw new ObjectNotFoundException($"Car not found by id {id}");
             }
 
             result.FuelType = car.FuelType; 

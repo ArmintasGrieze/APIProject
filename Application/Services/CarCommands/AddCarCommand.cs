@@ -32,16 +32,17 @@ namespace ProjectAPI.Services.CarCommands
 
         public async Task<CarDTO> Handle(AddCarCommand request, CancellationToken cancellationToken)
         {
-            var result = await carRepository.AddCar(mapper.Map<Car>(request.Car));
-
             var validator = new AddAndUpdateCarValidator();
 
-            var validationResult = validator.Validate(result);
+            var validationResult = validator.Validate(mapper.Map<Car>(request.Car));
 
             if (!validationResult.IsValid)
             {
                 throw new Exception();
             }
+
+            var result = await carRepository.AddCar(mapper.Map<Car>(request.Car));
+
 
             return mapper.Map<CarDTO>(result);
         }

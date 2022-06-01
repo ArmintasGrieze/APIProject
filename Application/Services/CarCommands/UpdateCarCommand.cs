@@ -35,21 +35,16 @@ namespace ProjectAPI.Services.CarCommands
 
         public async Task<CarDTO> Handle(UpdateCarCommand request, CancellationToken cancellationToken)
         {
-            var result = await carRepository.UpdateCar(mapper.Map<Car>(request.Car), request.Id);
-
-            if (result == null)
-            {
-                throw new Exception($"Car is not found by id {request.Id}.");
-            }
-
             var validator = new AddAndUpdateCarValidator();
 
-            var validationResult = validator.Validate(result);
+            var validationResult = validator.Validate(mapper.Map<Car>(request.Car));
 
             if (!validationResult.IsValid)
             {
                 throw new Exception();
             }
+
+            var result = await carRepository.UpdateCar(mapper.Map<Car>(request.Car), request.Id);
 
             return mapper.Map<CarDTO>(result);
         }

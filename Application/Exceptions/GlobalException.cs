@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Application.Exceptions;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Net;
@@ -30,6 +31,10 @@ namespace ProjectAPI
             object errors = null;
             switch (ex)
             {
+                case ObjectNotFoundException objectNotFoundException:
+                    errors = objectNotFoundException.Error;
+                    context.Response.StatusCode = (int)objectNotFoundException.Code;
+                    break;
                 case StatusCodeException statusCodeException:
                     errors = statusCodeException.Error;
                     context.Response.StatusCode = (int)statusCodeException.Code;
@@ -38,6 +43,8 @@ namespace ProjectAPI
                     errors = string.IsNullOrWhiteSpace(exception.Message) ? "Error" : exception.Message;
                     context.Response.StatusCode = (int)HttpStatusCode.Conflict;
                     break;
+
+
             }
             context.Response.ContentType = "application/json";
             if (errors != null)

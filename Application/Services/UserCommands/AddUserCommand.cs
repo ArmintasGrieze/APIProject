@@ -33,16 +33,16 @@ namespace ProjectAPI.Services.UserCommands
 
         public async Task<UserDTO> Handle(AddUserCommand request, CancellationToken cancellationToken)
         {
-            var result = await userRepository.Register(mapper.Map<User>(request.User));
-
             var validator = new RegisterAndLogInValidator();
 
-            var validationResult = validator.Validate(result);
+            var validationResult = validator.Validate(mapper.Map<User>(request.User));
 
             if (!validationResult.IsValid)
             {
                 throw new Exception();
             }
+
+            var result = await userRepository.Register(mapper.Map<User>(request.User));
 
             return mapper.Map<UserDTO>(result);
         }

@@ -1,4 +1,5 @@
 ﻿using APIdemo.Models;
+using Application.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -24,13 +25,13 @@ namespace ProjectAPI.Repositories
             this.configuration = configuration;
         }
 
-        public async Task<User> Login(User user)
+        public async Task<User> GetUserByUsername(User user)
         {
             var result = await this.context.Users.FirstOrDefaultAsync(x => x.Username == user.Username);
 
             if (result == null)
             {
-                return null;
+                throw new ObjectNotFoundException($"User by username {user.Username} is not found.");
             }
 
             return result;

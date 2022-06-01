@@ -42,21 +42,15 @@ namespace ProjectAPI.Services.UserCommands
 
         public async Task<AuthResponse> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
-            var result = await userRepository.Login(mapper.Map<User>(request.User));
-
-            if (result == null)
-            {
-                throw new Exception("User is not found.");
-            }
-
             var validator = new RegisterAndLogInValidator();
 
-            var validationResult = validator.Validate(result);
+            var validationResult = validator.Validate(mapper.Map<User>(request.User));
 
             if (!validationResult.IsValid)
             {
                 throw new Exception();
             }
+            var result = await userRepository.GetUserByUsername(mapper.Map<User>(request.User));
 
             if (!VerifyPasswordHash(request.User.Password, result.PasswordHash, result.PasswordSalt))
             {

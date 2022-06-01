@@ -7,6 +7,6 @@ namespace ProjectAPI.Repositories
     {
         Task<User> Register(User user);
 
-        Task<User> Login(User user);
+        Task<User> GetUserByUsername(User user);
     }
 }

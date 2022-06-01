@@ -33,11 +33,6 @@ namespace ProjectAPI.Services.CarCommands
         {
             var result = await carRepository.DeleteCar(request.Id);
 
-            if (result == null)
-            {
-                throw new Exception($"Car is not found by id {request.Id}.");
-            }
-
             return mapper.Map<CarDTO>(result);
         }
     }
